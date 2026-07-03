@@ -1,0 +1,46 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "images/uploads"
+
+collections:
+  - name: "journal"
+    label: "Journal Posts"
+    files:
+      - name: "journal"
+        label: "Journal"
+        file: "content/journal.json"
+        fields:
+          - label: "Posts"
+            name: "posts"
+            widget: "list"
+            summary: "{{title}}"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Slug (used in the URL, no spaces)", name: "slug", widget: "string" }
+              - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+              - { label: "Author", name: "author", widget: "string", default: "Jatto Godswill Osose (Jatto Whisper)" }
+              - { label: "Excerpt (short summary shown on the Journal list)", name: "excerpt", widget: "text" }
+              - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "events"
+    label: "Events"
+    files:
+      - name: "events"
+        label: "Events"
+        file: "content/events.json"
+        fields:
+          - label: "Events"
+            name: "events"
+            widget: "list"
+            summary: "{{title}}"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+              - { label: "Time (e.g. Red Carpet 3PM, Main Event 5PM)", name: "time", widget: "string", required: false }
+              - { label: "Venue", name: "venue", widget: "string", required: false }
+              - { label: "Description", name: "description", widget: "text", required: false }
+              - { label: "Ticket Link", name: "ticketLink", widget: "string", required: false }
+              - { label: "Flyer Image", name: "flyerImage", widget: "image", required: false }
