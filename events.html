@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Events — AFRIN Arts</title>
+<meta name="description" content="Upcoming events from AFRIN Arts, including AFRIVORA and other productions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Source+Sans+3:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <div class="brand"><a href="index.html" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;"><img src="images/afrin-arts-logo.jpg" alt="AFRIN Arts logo"> AFRIN <span>ARTS</span></a></div>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="productions.html">Productions</a>
+      <a href="afrivora.html">AFRIVORA</a>
+      <a href="events.html" class="active">Events</a>
+      <a href="journal.html">Journal</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero no-border">
+  <div class="wrap">
+    <p class="eyebrow">Events</p>
+    <h1 style="font-size:var(--fs-h2);">What's coming up</h1>
+    <p class="lede">Upcoming productions, festivals, and gatherings from AFRIN Arts.</p>
+  </div>
+</section>
+
+<section class="no-border">
+  <div class="wrap">
+    <div id="events-list">
+      <p style="color:var(--ivory-dim);">Loading…</p>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand"><img src="images/afrin-arts-logo.jpg" alt="AFRIN Arts logo"> AFRIN <span>ARTS</span></div>
+        <p style="color:var(--ivory-dim); max-width:32ch;">Theatre and cultural experiences rooted in African heritage. Home of AFRIVORA.</p>
+      </div>
+      <div>
+        <p class="eyebrow">Contact</p>
+        <p><a class="contact" href="tel:+2348073940635">+234 807 394 0635</a></p>
+        <p style="color:var(--ivory-dim);">YWCA Hall, after vegetable market,<br>Airport Road, Benin City</p>
+      </div>
+      <div>
+        <p class="eyebrow">Follow</p>
+        <p class="social-links">
+          <a href="https://wa.me/2349036796700" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="https://www.instagram.com/jatto_whisper_afrin_arts" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://youtube.com/@jattowhispertheatre" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://www.tiktok.com/@jatto_whisper" target="_blank" rel="noopener">TikTok</a>
+          <a href="https://www.facebook.com/AfrinArts" target="_blank" rel="noopener">Facebook</a>
+        </p>
+      </div>
+    </div>
+    <p class="fine">© 2026 AFRIN Arts. AFRIVORA — First Edition, 10th July 2026.</p>
+  </div>
+</footer>
+
+<script>
+fetch('content/events.json')
+  .then(r => r.json())
+  .then(data => {
+    const events = data.events || [];
+    events.sort((a,b) => new Date(a.date) - new Date(b.date));
+    const el = document.getElementById('events-list');
+    if (!events.length) { el.innerHTML = '<p style="color:var(--ivory-dim);">No events yet.</p>'; return; }
+    el.innerHTML = events.map(e => {
+      const dateStr = new Date(e.date).toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'});
+      return `
+      <div class="event-card" style="margin-bottom:2rem;">
+        ${e.flyerImage ? `<img src="${e.flyerImage}" alt="${e.title} flyer" style="width:100%; max-width:360px; border-radius:4px; border:1px solid var(--rule); margin-bottom:1.5rem;">` : ''}
+        <p class="eyebrow" style="margin-bottom:0.4rem;">${dateStr}</p>
+        <h3 style="margin-top:0;">${e.title}</h3>
+        ${e.time ? `<p style="color:var(--ivory-dim); margin:0.3rem 0;">${e.time}</p>` : ''}
+        ${e.venue ? `<p style="color:var(--ivory-dim); margin:0.3rem 0;">${e.venue}</p>` : ''}
+        ${e.description ? `<p style="color:var(--ivory-dim); margin-top:0.8rem;">${e.description}</p>` : ''}
+        ${e.ticketLink ? `<a class="btn primary" style="margin-top:1rem; display:inline-block;" href="${e.ticketLink}" target="_blank" rel="noopener">Buy Tickets</a>` : ''}
+      </div>`;
+    }).join('');
+  })
+  .catch(() => {
+    document.getElementById('events-list').innerHTML = '<p style="color:var(--ivory-dim);">Could not load events.</p>';
+  });
+</script>
+
+</body>
+</html>
